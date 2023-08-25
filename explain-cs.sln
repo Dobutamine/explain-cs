@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 25.0.1706.3
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "explain-cs", "explain-cs\explain-cs.csproj", "{5256C5D1-355C-4650-8C0F-638F8F50A4DE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExplainCoreLib", "ExplainCoreLib\ExplainCoreLib.csproj", "{E8A23208-2A42-4601-83E8-5CB2CAC77289}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5256C5D1-355C-4650-8C0F-638F8F50A4DE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5256C5D1-355C-4650-8C0F-638F8F50A4DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5256C5D1-355C-4650-8C0F-638F8F50A4DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5256C5D1-355C-4650-8C0F-638F8F50A4DE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E8A23208-2A42-4601-83E8-5CB2CAC77289}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E8A23208-2A42-4601-83E8-5CB2CAC77289}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E8A23208-2A42-4601-83E8-5CB2CAC77289}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E8A23208-2A42-4601-83E8-5CB2CAC77289}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {B6876E40-238A-4C80-9C08-264894BBAD87}
+	EndGlobalSection
+EndGlobal
