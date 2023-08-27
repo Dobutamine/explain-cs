@@ -1,11 +1,14 @@
 ﻿using System;
 using ExplainCoreLib.base_models;
+using ExplainCoreLib.Interfaces;
 
 namespace ExplainCoreLib.core_models
 {
-	public class BloodTimeVaryingElastance : TimeVaryingElastance
+	public class BloodTimeVaryingElastance : TimeVaryingElastance, IBlood
 	{
-		public BloodTimeVaryingElastance(
+        public double sodium { get; set; } = 140.0;
+
+        public BloodTimeVaryingElastance(
             string _name,
             string _description,
             string _model_type,
@@ -20,6 +23,11 @@ namespace ExplainCoreLib.core_models
         {
 
         }
-	}
+        public override void volume_in(double dvol, Capacitance model_from)
+        {
+            Console.WriteLine("volume in of blood timevarying elastance");
+        }
+
+    }
 }
 

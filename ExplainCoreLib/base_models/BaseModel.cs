@@ -9,8 +9,8 @@ namespace ExplainCoreLib.base_models
 		public string model_type { get; set; }
         public bool is_enabled { get; set; }
 		public bool is_initialized = false;
-		private Dictionary<string, BaseModel> _models = new();
-		private double _t = 0.0005;
+		public Dictionary<string, BaseModel> _models = new();
+		public double _t = 0.0005;
 
         public BaseModel(string _name, string _description, string _modelType, bool _isEnabled)
 		{
@@ -38,9 +38,7 @@ namespace ExplainCoreLib.base_models
 			}
 		}
 
-		public virtual void CalcModel()
-		{
-        }
+		public virtual void CalcModel() {}
 	}
 }
 

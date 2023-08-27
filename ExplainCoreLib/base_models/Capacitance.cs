@@ -1,5 +1,6 @@
 ﻿using System;
 using ExplainCoreLib.base_models;
+using ExplainCoreLib.Interfaces;
 namespace ExplainCoreLib.base_models
 {
 	public class Capacitance : BaseModel
@@ -8,16 +9,16 @@ namespace ExplainCoreLib.base_models
 		public double el_base { get; set; } = 0.0;
 		public double el_k { get; set; } = 0.0;
 
-		public double u_vol_factor = 1.0;
-        public double el_base_factor = 1.0;
-        public double el_k_factor = 1.0;
+		public double u_vol_factor { get; set; } = 1.0;
+        public double el_base_factor { get; set; } = 1.0;
+        public double el_k_factor { get; set; } = 1.0;
 
-        public double vol = 1.0;
-        public double pres = 0.0;
-        public double pres_ext = 1.0;
-        public double pres_cc = 1.0;
-        public double pres_atm = 1.0;
-        public double pres_mus = 1.0;
+        public double vol { get; set; } = 1.0;
+        public double pres { get; set; } = 0.0;
+        public double pres_ext { get; set; } = 1.0;
+        public double pres_cc { get; set; } = 1.0;
+        public double pres_atm { get; set; } = 1.0;
+        public double pres_mus { get; set; } = 1.0;
 
         public Capacitance(
 			string _name,
@@ -37,10 +38,8 @@ namespace ExplainCoreLib.base_models
 			el_k = _el_k;
         }
 
-		public override void CalcModel()
-		{
+        public virtual void volume_in(double dvol, Capacitance model_from) { }
 
-		}
-	}
+    }
 }
 

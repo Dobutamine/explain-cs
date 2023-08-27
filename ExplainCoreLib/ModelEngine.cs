@@ -42,8 +42,7 @@ public class ModelEngine
             dataCollector = new(models, modeling_stepsize);
             taskScheduler = new(models, modeling_stepsize);
             Console.WriteLine("Instantiated a new model engine: {0}", description);
-        } 
-
+        }
     }
 
     private bool ProcessModelDefinition(string _modelDefinition)
@@ -81,6 +80,10 @@ public class ModelEngine
                         BloodResistor newValve = model.Value.ToObject<BloodResistor>();
                         models.Add(newValve.name, newValve);
                         break;
+                    case "Heart":
+                        Heart heart = model.Value.ToObject<Heart>();
+                        models.Add(heart.name, heart);
+                        break;
                 }
             }
         } catch
@@ -94,6 +97,9 @@ public class ModelEngine
    
     private bool InitSubModels()
     {
+
+        string n = ((Heart)models["Heart"]).right_ventricle;
+        Console.WriteLine(n);
         try
         {
             // initialize all models now the model list as has been constructed
@@ -102,7 +108,8 @@ public class ModelEngine
                 // pass a reference to the models dictionary and the current stepsize to the submodels
                 submodel.Value.InitModel(models, modeling_stepsize);
             }
-        } catch
+        }
+        catch
         {
             return false;
         }

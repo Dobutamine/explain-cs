@@ -12,6 +12,7 @@
     <None Remove="functions\" />
     <None Remove="helpers\" />
     <None Remove="custom_models\" />
+    <None Remove="Interfaces\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="base_models\" />
@@ -19,6 +20,7 @@
     <Folder Include="functions\" />
     <Folder Include="helpers\" />
     <Folder Include="custom_models\" />
+    <Folder Include="Interfaces\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
