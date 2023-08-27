@@ -17,16 +17,9 @@ namespace ExplainCoreLib.core_models
             double _vol,
             double _el_min,
             double _el_max,
-            double _el_k
-            )
-            : base(_name, _description, _model_type, _is_enabled, _u_vol, _vol, _el_min, _el_max, _el_k)
-        {
-
-        }
-        public override void volume_in(double dvol, Capacitance model_from)
-        {
-            Console.WriteLine("volume in of blood timevarying elastance");
-        }
+            double _el_k,
+            bool _fixed_composition)
+            : base(_name, _description, _model_type, _is_enabled, _u_vol, _vol, _el_min, _el_max, _el_k, _fixed_composition) {}
 
     }
 }

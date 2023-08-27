@@ -16,7 +16,8 @@ namespace ExplainCoreLib.base_models
         public double r_for_factor { get; set; } = 1.0;
         public double r_back_factor { get; set; } = 1.0;
         public double r_k_factor { get; set; } = 1.0;
-
+        public double p1_ext { get; set; } = 1.0;
+        public double p2_ext { get; set; } = 1.0;
         public double flow { get; set; } = 0.0;
 
         public Capacitance? _model_comp_from;
@@ -58,8 +59,59 @@ namespace ExplainCoreLib.base_models
                 Console.WriteLine("error instantiating resistor {0}: {1} to {2}", name, comp_from, comp_to);
             }
 
-
             return true;
+        }
+
+        public override void CalcModel()
+        {
+            // Get the pressures
+            double _p1 = _model_comp_from.pres + p1_ext;
+            double _p2 = _model_comp_to.pres + p2_ext;
+
+            // Reset the external pressures
+            p1_ext = 0;
+            p2_ext = 0;
+
+            // Calculate the flow
+            if (no_flow || (_p1 <= _p2 && no_back_flow))
+            {
+                flow = 0.0;
+            }
+            else if (_p1 > _p2)  // Forward flow
+            {
+                flow = (_p1 - _p2) / (r_for * r_for_factor) -
+                       r_k * r_k_factor * Math.Pow(flow, 2);
+            }
+            else  // Back flow
+            {
+                flow = (_p1 - _p2) / (r_back * r_back_factor) +
+                       r_k * r_k_factor * Math.Pow(flow, 2);
+            }
+
+            // Update the volume
+            UpdateVolumes();
+
+        }
+
+        private void UpdateVolumes()
+        {
+            // Now update the volumes of the model components connected by this resistor
+            if (flow > 0)
+            {
+                // Flow is from comp_from to comp_to
+                double vol_not_removed = _model_comp_from.volume_out(flow * _t);
+                _model_comp_to.volume_in((flow * _t) - vol_not_removed, _model_comp_from);
+                return;
+            }
+
+            if (flow < 0)
+            {
+                // Flow is from comp_to to comp_from
+                double vol_not_removed = _model_comp_to.volume_out(-flow * _t);
+                _model_comp_from.volume_in((-flow * _t) - vol_not_removed, _model_comp_to);
+                return;
+            }
+
         }
     }
 }

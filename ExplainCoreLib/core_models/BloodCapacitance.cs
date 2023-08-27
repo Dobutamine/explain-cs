@@ -16,15 +16,11 @@ namespace ExplainCoreLib.core_models
             double _u_vol,
             double _vol,
             double _el_base,
-            double _el_k
+            double _el_k,
+            bool _fixed_composition
             )
-            : base(_name, _description, _model_type, _is_enabled, _u_vol, _vol, _el_base, _el_k)
-        {
+            : base(_name, _description, _model_type, _is_enabled, _u_vol, _vol, _el_base, _el_k, _fixed_composition) {}
 
-        }
-        public override void volume_in(double dvol, Capacitance model_from) {
-            Console.WriteLine("volume in of blood capactince");
-        }
     }
 }
 
