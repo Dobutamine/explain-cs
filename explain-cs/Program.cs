@@ -1,7 +1,10 @@
-﻿// See https://aka.ms/new-console-template for more information
+﻿using System.IO;
 
+// load the model definition file
+string modelDefinition = File.ReadAllText("normal_neonate.json");
 
-Console.WriteLine("Explain tester");
+// instantiate a model engine with the model definition file
+ExplainCoreLib.ModelEngine engine = new(modelDefinition);
 
-ExplainCoreLib.ModelEngine engine = new ExplainCoreLib.ModelEngine();
-
+// calculate 5 seconds of the model
+engine.Calculate(5);

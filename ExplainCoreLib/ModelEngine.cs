@@ -1,8 +1,138 @@
 ﻿namespace ExplainCoreLib;
 
+using System;
+using ExplainCoreLib.base_models;
+using ExplainCoreLib.core_models;
+using ExplainCoreLib.helpers;
+using ExplainCoreLib.functions;
+using Newtonsoft.Json;
+
 public class ModelEngine
 {
+    public Dictionary<string, BaseModel> models { get; set; } = new();
 
+    public string name { get; set; } = "";
+    public string description { get; set; } = "";
+    public double weight { get; set; } = 3.3;
+    public double modeling_stepsize { get; set; } = 0.0005;
+    public double model_time_total { get; set; } = 0.0;
+    public DataCollector? dataCollector;
+    public TaskScheduler? taskScheduler;
 
+    public ModelEngine(string _modelDefinition)
+    {
+        // the modeldefinition file containes all the model properties and is used by all current
+        // versions of explain (c++, python, javascript and c#). Due to it's structure it needs processing.
+        bool res_processing = ProcessModelDefinition(_modelDefinition);
+        if (!res_processing)
+        {
+            Console.WriteLine("Error processing the model definition file!");
+        }
+
+        // all the submodels need to be initialized which can't be done in the constructor
+        bool res_initialization = InitSubModels();
+        if (!res_initialization)
+        {
+            Console.WriteLine("Error initializing the submodels!");
+        }
+
+        if (res_processing && res_initialization)
+        {
+            // define a data collector and task scheduler
+            dataCollector = new(models, modeling_stepsize);
+            taskScheduler = new(models, modeling_stepsize);
+            Console.WriteLine("Instantiated a new model engine: {0}", description);
+        } 
+
+    }
+
+    private bool ProcessModelDefinition(string _modelDefinition)
+    {
+        try
+        {
+            // deserialize the model definition to a JSON object for further processing
+            var jsonModel = JsonConvert.DeserializeObject<dynamic>(_modelDefinition);
+
+            // set the general model properties
+            name = jsonModel["name"].ToString();
+            description = jsonModel["description"].ToString();
+            weight = (double)jsonModel["weight"];
+            modeling_stepsize = (double)jsonModel["modeling_stepsize"];
+            model_time_total = (double)jsonModel["model_time_total"];
+
+            // process all submodels
+            foreach (var model in jsonModel["models"])
+            {
+                switch (model.Value.model_type.ToString())
+                {
+                    case "BloodTimeVaryingElastance":
+                        BloodTimeVaryingElastance newBtve = model.Value.ToObject<BloodTimeVaryingElastance>();
+                        models.Add(newBtve.name, newBtve);
+                        break;
+                    case "BloodCapacitance":
+                        BloodCapacitance newBc = model.Value.ToObject<BloodCapacitance>();
+                        models.Add(newBc.name, newBc);
+                        break;
+                    case "BloodResistor":
+                        BloodResistor newRes = model.Value.ToObject<BloodResistor>();
+                        models.Add(newRes.name, newRes);
+                        break;
+                    case "BloodValve":
+                        BloodResistor newValve = model.Value.ToObject<BloodResistor>();
+                        models.Add(newValve.name, newValve);
+                        break;
+                }
+            }
+        } catch
+        {
+            return false;
+        }
+ 
+        // return true if no errors were encountered
+        return true;
+    }
+   
+    private bool InitSubModels()
+    {
+        try
+        {
+            // initialize all models now the model list as has been constructed
+            foreach (var submodel in models)
+            {
+                // pass a reference to the models dictionary and the current stepsize to the submodels
+                submodel.Value.InitModel(models, modeling_stepsize);
+            }
+        } catch
+        {
+            return false;
+        }
+        return true;
+    }
+
+    public void Calculate(double timeToCalculate = 10.0)
+    {
+        // calculate the number of steps needed
+        int noSteps = (int)(timeToCalculate / modeling_stepsize);
+
+        for (int i = 0; i < noSteps; i++)
+        {
+            // calculate all the submodels
+            foreach (var submodel in models)
+            {
+                submodel.Value.StepModel();
+            }
+
+            // update the datacollector
+            dataCollector.CollectData(model_time_total);
+
+            // update the taskscheduler
+            taskScheduler.RunTasks(model_time_total);
+
+            // update the model total model time
+            model_time_total += modeling_stepsize;
+
+        }
+
+    }
 }
 

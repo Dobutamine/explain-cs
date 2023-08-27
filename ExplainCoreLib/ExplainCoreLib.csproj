@@ -6,4 +6,24 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Remove="base_models\" />
+    <None Remove="core_models\" />
+    <None Remove="functions\" />
+    <None Remove="helpers\" />
+    <None Remove="custom_models\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="base_models\" />
+    <Folder Include="core_models\" />
+    <Folder Include="functions\" />
+    <Folder Include="helpers\" />
+    <Folder Include="custom_models\" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\.editorconfig" />
+  </ItemGroup>
 </Project>
