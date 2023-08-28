@@ -82,7 +82,7 @@ namespace ExplainCoreLib.core_models
         public override void CalcModel()
         {
             // calculate the qtc time depending on the heartrate
-            cqt_time = calc_qtc(heart_rate);
+            cqt_time = CalcQtc(heart_rate);
 
             // calculate the sinus node interval in seconds depending on the heart rate
             _sa_node_interval = 60.0 / heart_rate;
@@ -194,7 +194,7 @@ namespace ExplainCoreLib.core_models
         }
 
 
-        private double calc_qtc(double hr)
+        private double CalcQtc(double hr)
         {
             if (hr > 10)
             {

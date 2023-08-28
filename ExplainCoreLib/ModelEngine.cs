@@ -1,6 +1,7 @@
 ﻿namespace ExplainCoreLib;
 
 using System;
+using System.Diagnostics;
 using ExplainCoreLib.base_models;
 using ExplainCoreLib.core_models;
 using ExplainCoreLib.helpers;
@@ -15,8 +16,12 @@ public class ModelEngine
     public double weight { get; set; } = 3.3;
     public double modeling_stepsize { get; set; } = 0.0005;
     public double model_time_total { get; set; } = 0.0;
+
     public DataCollector? dataCollector;
     public TaskScheduler? taskScheduler;
+
+    // Create a Stopwatch instance
+    readonly Stopwatch stopwatch = new();
 
     public ModelEngine(string _modelDefinition)
     {
@@ -79,9 +84,29 @@ public class ModelEngine
                         BloodResistor newValve = model.Value.ToObject<BloodResistor>();
                         models.Add(newValve.name, newValve);
                         break;
+                    case "GasCapacitance":
+                        GasCapacitance newGc = model.Value.ToObject<GasCapacitance>();
+                        models.Add(newGc.name, newGc);
+                        break;
+                    case "GasResistor":
+                        GasResistor newGasRes = model.Value.ToObject<GasResistor>();
+                        models.Add(newGasRes.name, newGasRes);
+                        break;
                     case "Heart":
                         Heart heart = model.Value.ToObject<Heart>();
                         models.Add(heart.name, heart);
+                        break;
+                    case "Container":
+                        Container container = model.Value.ToObject<Container>();
+                        models.Add(container.name, container);
+                        break;
+                    case "Blood":
+                        Blood blood = model.Value.ToObject<Blood>();
+                        models.Add(blood.name, blood);
+                        break;
+                    case "Gas":
+                        Gas gas = model.Value.ToObject<Gas>();
+                        models.Add(gas.name, gas);
                         break;
                 }
             }
@@ -96,9 +121,6 @@ public class ModelEngine
    
     private bool InitSubModels()
     {
-
-        string n = ((Heart)models["Heart"]).right_ventricle;
-        Console.WriteLine(n);
         try
         {
             // initialize all models now the model list as has been constructed
@@ -120,6 +142,11 @@ public class ModelEngine
         // calculate the number of steps needed
         int noSteps = (int)(timeToCalculate / modeling_stepsize);
 
+      
+
+        // Start the stopwatch before the step you want to measure
+        stopwatch.Start();
+
         for (int i = 0; i < noSteps; i++)
         {
             // calculate all the submodels
@@ -138,6 +165,17 @@ public class ModelEngine
             model_time_total += modeling_stepsize;
 
         }
+
+        // Stop the stopwatch after the step
+        stopwatch.Stop();
+
+        // Get the elapsed time in various formats
+        TimeSpan elapsed = stopwatch.Elapsed;
+        double elapsedMilliseconds = stopwatch.ElapsedMilliseconds;
+
+        // Print the elapsed time
+        Console.WriteLine($"Calculating model run of {timeToCalculate} sec. in {noSteps} steps.");
+        Console.WriteLine($"Ready in {elapsedMilliseconds / 1000.0} sec. Average model step in {elapsedMilliseconds / (double) noSteps } ms.");
 
     }
 }

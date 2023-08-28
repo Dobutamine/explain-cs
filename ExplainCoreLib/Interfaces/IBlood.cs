@@ -1,9 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
+
 namespace ExplainCoreLib.Interfaces
 {
 	public interface IBlood
 	{
-		double sodium { get; set; }
-	}
+		Dictionary<string, double> solutes { get; set; }
+        Dictionary<string, double> aboxy { get; set; }
+    }
 }
 

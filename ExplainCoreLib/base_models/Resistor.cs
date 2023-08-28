@@ -99,16 +99,16 @@ namespace ExplainCoreLib.base_models
             if (flow > 0)
             {
                 // Flow is from comp_from to comp_to
-                double vol_not_removed = _model_comp_from.volume_out(flow * _t);
-                _model_comp_to.volume_in((flow * _t) - vol_not_removed, _model_comp_from);
+                double vol_not_removed = _model_comp_from.VolumeOut(flow * _t);
+                _model_comp_to.VolumeIn((flow * _t) - vol_not_removed, _model_comp_from);
                 return;
             }
 
             if (flow < 0)
             {
                 // Flow is from comp_to to comp_from
-                double vol_not_removed = _model_comp_to.volume_out(-flow * _t);
-                _model_comp_from.volume_in((-flow * _t) - vol_not_removed, _model_comp_to);
+                double vol_not_removed = _model_comp_to.VolumeOut(-flow * _t);
+                _model_comp_from.VolumeIn((-flow * _t) - vol_not_removed, _model_comp_to);
                 return;
             }
 

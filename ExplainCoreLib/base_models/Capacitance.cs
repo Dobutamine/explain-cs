@@ -54,12 +54,12 @@ namespace ExplainCoreLib.base_models
             pres_mus = 0.0;
         }
 		
-        public virtual void volume_in(double dvol, Capacitance model_from) {
+        public virtual void VolumeIn(double dvol, Capacitance model_from) {
             // increase the volume
             vol += dvol;
         }
 
-        public virtual double volume_out(double dvol)
+        public virtual double VolumeOut(double dvol)
         {
             if (fixed_composition)
             {
