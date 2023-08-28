@@ -13,9 +13,6 @@ namespace ExplainCoreLib.core_models
         public double fio2 { get; set; } = 0.21;
         public double pres_atm { get; set; } = 760.0;
 
-        private readonly double _gas_constant = 62.36367;
-
-
         public Gas(
             string _name,
             string _description,
