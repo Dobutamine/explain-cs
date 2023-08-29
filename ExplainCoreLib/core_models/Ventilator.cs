@@ -43,8 +43,8 @@ namespace ExplainCoreLib.core_models
         public double compliance { get; set; }
         public double exp_tidal_volume { get; set; } = 0.0;
         public double insp_tidal_volume { get; set; } = 0.0;
-        private bool _inspiration;
-        private bool _expiration;
+        private bool _inspiration = true;
+        private bool _expiration = false;
         private double _insp_counter = 0;
         private double _insp_volume_counter = 0;
         private double _exp_counter = 0;
@@ -191,11 +191,11 @@ namespace ExplainCoreLib.core_models
                 _insp_volume_counter = 0;
             }
 
-            if (_exp_counter > insp_time)
+            if (_exp_counter > exp_time)
             {
                 // expiration has elasped
-                _inspiration = false;
-                _expiration = true;
+                _inspiration = true;
+                _expiration = false;
                 _insp_counter = 0;
                 _exp_counter = 0;
                 exp_tidal_volume = _exp_volume_counter;
@@ -351,22 +351,27 @@ namespace ExplainCoreLib.core_models
             // connect all the gas capacitance
             _insp_valve = new GasResistor("INSPVALVE", "inspiration valve", "GasResistor", false, false, true, "VENTIN", "TUBINGIN", 30000, 100000, 0);
             _insp_valve.InitModel(_models);
+            _models.Add(_insp_valve.name, _insp_valve);
             _vent_parts.Add(_insp_valve);
 
             _tubingin_ettube = new GasResistor("TUBINGIN_ETTUBE", "tubing in to et tube", "GasResistor", false, false, false, "TUBINGIN", "ETTUBE", 25, 25, 0);
             _tubingin_ettube.InitModel(_models);
+            _models.Add(_tubingin_ettube.name, _tubingin_ettube);
             _vent_parts.Add(_tubingin_ettube);
 
             _ettube_ds = new GasResistor("ETTUBE_DS", "et tube to dead space", "GasResistor", false, false, false, "ETTUBE", "DS", 50, 50, 0);
             _ettube_ds.InitModel(_models);
+            _models.Add(_ettube_ds.name, _ettube_ds);
             _vent_parts.Add(_ettube_ds);
 
             _ettube_tubingout = new GasResistor("ETTUBE_TUBINGOUT", "et tube to expiration tubing", "GasResistor", false, false, false, "ETTUBE", "TUBINGOUT", 25, 25, 0);
             _ettube_tubingout.InitModel(_models);
+            _models.Add(_ettube_tubingout.name, _ettube_tubingout);
             _vent_parts.Add(_ettube_tubingout);
 
             _exp_valve = new GasResistor("EXPVALVE", "expiration valve", "GasResistor", false, false, true, "TUBINGOUT", "VENTOUT", 300000, 300000, 0);
             _exp_valve.InitModel(_models);
+            _models.Add(_exp_valve.name, _exp_valve);
             _vent_parts.Add(_exp_valve);
 
         }

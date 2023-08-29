@@ -980,6 +980,7 @@
       "p_atm": 760.0,
       "temp": 37.0,
       "humidity": 1.0,
+      "fio2":  0.21,
       "tubing_elastance": 1160.0,
       "tubing_diameter": 0.0102,
       "tubing_length": 1.6,

@@ -1,6 +1,7 @@
 ﻿namespace ExplainCoreLib;
 
 using System;
+using System.Threading;
 using System.Diagnostics;
 using ExplainCoreLib.base_models;
 using ExplainCoreLib.core_models;
@@ -18,8 +19,11 @@ public class ModelEngine
     public double modeling_stepsize { get; set; } = 0.0005;
     public double model_time_total { get; set; } = 0.0;
 
+    public double rtInterval { get; set; } = 0.015;
     public DataCollector? dataCollector;
     public TaskScheduler? taskScheduler;
+
+    private Timer _rtTimer;
 
     // Create a Stopwatch instance
     readonly Stopwatch stopwatch = new();
@@ -146,8 +150,8 @@ public class ModelEngine
    
     private bool InitSubModels()
     {
-        try
-        {
+        //try
+        //{
             // initialize all models now the model list as has been constructed
             foreach (var submodel in models)
             {
@@ -157,11 +161,11 @@ public class ModelEngine
 
             // initialize the dependent models. These models add model components to the list
             ((Ventilator)models["Ventilator"]).BuildVentilator();
-        }
-        catch
-        {
-            return false;
-        }
+        //}
+        //catch
+        //{
+        //    return false;
+        //}
         return true;
     }
 
@@ -169,8 +173,6 @@ public class ModelEngine
     {
         // calculate the number of steps needed
         int noSteps = (int)(timeToCalculate / modeling_stepsize);
-
-      
 
         // Start the stopwatch before the step you want to measure
         stopwatch.Start();
@@ -191,12 +193,6 @@ public class ModelEngine
 
             // update the model total model time
             model_time_total += modeling_stepsize;
-
-            //double pco2 = ((BloodCapacitance)models["AA"]).aboxy["pco2"];
-            //double po2 = ((BloodCapacitance)models["AA"]).aboxy["po2"];
-            //double respRate = ((Breathing)models["Breathing"]).target_tidal_volume;
-            //Console.WriteLine("po2: {0}, pco2: {1}", po2, pco2);
-            //Console.WriteLine(respRate * 1000);
         }
 
         // Stop the stopwatch after the step
@@ -208,6 +204,57 @@ public class ModelEngine
         // Print the elapsed time
         Console.WriteLine($"Calculating model run of {timeToCalculate} sec. in {noSteps} steps.");
         Console.WriteLine($"Ready in {elapsedMilliseconds / 1000.0} sec. Average model step in {elapsedMilliseconds / (double) noSteps } ms.");
+
+    }
+
+    public void Start(double _interval = 0.015)
+    {
+        // Create a Timer instance that calls the DoSomething function every 1000 milliseconds (1 second).
+        rtInterval = _interval;
+        _rtTimer = new Timer(ModelStepRt, null, 0, (int)(rtInterval * 1000));
+
+        Console.WriteLine("Press Enter to exit.");
+        Console.ReadLine(); // This will keep the console application running
+    }
+    public void Stop()
+    {
+        _rtTimer.Dispose();
+    }
+
+    public void ModelStepRt(object state)
+    {
+   
+        // calculate the number of steps needed
+        int noSteps = (int)(rtInterval / modeling_stepsize);
+
+        // calculate all models
+        for (int i = 0; i < noSteps; i++)
+        {
+            // calculate all the submodels
+            foreach (var submodel in models)
+            {
+                submodel.Value.StepModel();
+            }
+
+            // update the datacollector
+            dataCollector.CollectData(model_time_total);
+
+            // update the taskscheduler
+            taskScheduler.RunTasks(model_time_total);
+
+            // update the model total model time
+            model_time_total += modeling_stepsize;
+        }
+
+        double pco2 = ((BloodCapacitance)models["AA"]).aboxy["pco2"];
+        double po2 = ((BloodCapacitance)models["AA"]).aboxy["po2"];
+        Console.WriteLine("po2: {0}, pco2: {1}", po2, pco2);
+
+    }
+
+    public void SwitchVentilator(bool state)
+    {
+        ((Ventilator)models["Ventilator"]).SwitchVentilator(state);
 
     }
 }
