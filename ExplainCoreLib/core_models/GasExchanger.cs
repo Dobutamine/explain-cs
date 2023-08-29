@@ -55,23 +55,11 @@ namespace ExplainCoreLib.core_models
         public override void CalcModel()
         {
             // calculate the po2 and pco2 in the blood compartments
-            var result = Acidbase.CalcAcidBaseFromTco2(_blood);
-            if (result.valid)
+            if (_blood is not null)
             {
-                _blood.aboxy["ph"] = result.ph;
-                _blood.aboxy["pco2"] = result.pco2;
-                _blood.aboxy["hco3"] = result.hco3;
-                _blood.aboxy["be"] = result.be;
-                _blood.aboxy["sid_app"] = result.sid_app;
+                BloodComposition.SetBloodComposition(_blood);
             }
-
-            var result_oxy = Oxygenation.CalcOxygenationFromTo2(_blood);
-            if (result_oxy.valid)
-            {
-                _blood.aboxy["po2"] = result_oxy.po2;
-                _blood.aboxy["so2"] = result_oxy.so2;
-            }
-
+         
             // get the partial pressures and gas concentrations from the components
             double po2_blood = _blood.aboxy["po2"];
             double pco2_blood = _blood.aboxy["pco2"];

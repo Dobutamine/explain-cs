@@ -30,7 +30,51 @@ namespace ExplainCoreLib.functions
         private static double uma = 0.0;
         private static double hemoglobin = 0.0;
 
-		public static AcidBaseResult CalcAcidBaseFromTco2(BloodCapacitance comp)
+        public static AcidBaseResult CalcAcidBaseFromTco2(BloodTimeVaryingElastance comp)
+        {
+            // declare a dictionary for the result
+            AcidBaseResult result = new()
+            {
+                valid = false
+            };
+
+            // calculate the apparent strong ion difference(SID) in mEq / l
+            // comp.sid = comp.sodium + comp.potassium + 2 * comp.calcium + 2 * comp.magnesium - comp.chloride - comp.lactate - comp.urate
+
+            // get the total co2 concentration in mmol/l
+            tco2 = comp.aboxy["tco2"];
+
+            // calculate the apparent SID
+            sid = comp.solutes["na"] + comp.solutes["k"] + 2 * comp.solutes["ca"] + 2 * comp.solutes["mg"] - comp.solutes["cl"] - comp.solutes["lact"];
+
+            // get the albumin concentration in g/l
+            albumin = comp.aboxy["albumin"];
+
+            // get the inorganic phosphates concentration in mEq/l
+            phosphates = comp.aboxy["phosphates"];
+
+            // get the unmeasured anions in mEq/l
+            uma = comp.aboxy["uma"];
+
+            // get the hemoglobin concentration in mmol/l
+            hemoglobin = comp.aboxy["hemoglobin"];
+
+            // now try to find the hydrogen concentration at the point where the net charge of the plasma is zero within limits of the brent accuracy
+            double hp = BrentRootFindingProcedure.BrentRootFinding(NetChargePlasma, left_hp, right_hp, max_iterations, brent_accuracy);
+
+            // if a hp is found then return the result
+            if (hp > 0)
+            {
+                result.valid = true;
+                result.ph = (-Math.Log10(hp / 1000));
+                result.pco2 = pco2;
+                result.hco3 = hco3;
+                result.be = be;
+                result.sid_app = sid;
+            }
+            return result;
+        }
+        public static AcidBaseResult CalcAcidBaseFromTco2(BloodCapacitance comp)
 		{
             // declare a dictionary for the result
             AcidBaseResult result = new()
@@ -74,7 +118,6 @@ namespace ExplainCoreLib.functions
             }
             return result;
         }
-
         private static double NetChargePlasma(double hp_estimate)
         {
             // Calculate the pH based on the current hp estimate

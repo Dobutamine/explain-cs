@@ -81,6 +81,10 @@ public class ModelEngine
                         BloodResistor newRes = model.Value.ToObject<BloodResistor>();
                         models.Add(newRes.name, newRes);
                         break;
+                    case "Shunt":
+                        Shunt shunt = model.Value.ToObject<Shunt>();
+                        models.Add(shunt.name, shunt);
+                        break;
                     case "BloodValve":
                         BloodResistor newValve = model.Value.ToObject<BloodResistor>();
                         models.Add(newValve.name, newValve);
@@ -120,6 +124,14 @@ public class ModelEngine
                     case "Metabolism":
                         Metabolism metabolism = model.Value.ToObject<Metabolism>();
                         models.Add(metabolism.name, metabolism);
+                        break;
+                    case "Ans":
+                        Ans ans = model.Value.ToObject<Ans>();
+                        models.Add(ans.name, ans);
+                        break;
+                    case "Ventilator":
+                        Ventilator ventilator = model.Value.ToObject<Ventilator>();
+                        models.Add(ventilator.name, ventilator);
                         break;
                 }
             }
@@ -176,14 +188,12 @@ public class ModelEngine
 
             // update the model total model time
             model_time_total += modeling_stepsize;
-
         }
 
         // Stop the stopwatch after the step
         stopwatch.Stop();
 
         // Get the elapsed time in various formats
-        TimeSpan elapsed = stopwatch.Elapsed;
         double elapsedMilliseconds = stopwatch.ElapsedMilliseconds;
 
         // Print the elapsed time

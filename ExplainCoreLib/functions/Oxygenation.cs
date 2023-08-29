@@ -25,6 +25,34 @@ namespace ExplainCoreLib.functions
         private static double po2 = 0.0;
         private static double so2 = 0.0;
 
+        public static OxyResult CalcOxygenationFromTo2(BloodTimeVaryingElastance comp)
+        {
+            // declare a dictionary for the result
+            OxyResult result = new()
+            {
+                valid = false
+            };
+
+            // get the for the oxygenation independent parameters from the component
+            to2 = comp.aboxy["to2"];
+            ph = comp.aboxy["ph"];
+            be = comp.aboxy["be"];
+            dpg = comp.aboxy["dpg"];
+            hemoglobin = comp.aboxy["hemoglobin"];
+            temp = comp.aboxy["temp"];
+
+            // calculate the po2 from the to2 using a brent root finding function and oxygen dissociation curve
+            po2 = BrentRootFindingProcedure.BrentRootFinding(OxygenContent, left_o2, right_o2, max_iterations, brent_accuracy);
+
+            // if a po2 is found then return the result
+            if (po2 > 0)
+            {
+                result.valid = true;
+                result.po2 = po2;
+                result.so2 = so2 * 100.0;
+            }
+            return result;
+        }
         public static OxyResult CalcOxygenationFromTo2(BloodCapacitance comp)
         {
             // declare a dictionary for the result
@@ -53,7 +81,6 @@ namespace ExplainCoreLib.functions
             }
             return result;
         }
-
         private static double OxygenContent(double po2Estimate)
         {
             // calculate the saturation from the current po2 from the current po2 estimate
@@ -76,7 +103,6 @@ namespace ExplainCoreLib.functions
 
             return dto2;
         }
-
         private static double OxygenDissociationCurve(double po2Estimate)
         {
             // calculate the saturation from the po2 depending on the ph,be, temperature and dpg level.

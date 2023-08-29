@@ -32,7 +32,7 @@ namespace ExplainCoreLib.core_models
         public override bool InitModel(Dictionary<string, BaseModel> models, double stepsize = 0.0005)
         {
             base.InitModel(models, stepsize);
-
+            
             SetAtmosphericPressure();
             SetTemperatures();
             SetHumidity();
@@ -45,27 +45,7 @@ namespace ExplainCoreLib.core_models
                 if (model.Value is GasCapacitance gc)
                 {
                     // calculate the gas composition
-                    Dictionary<string, double> result = AirComposition.CalcAirComposition(gc, fio2, gc.temp, gc.humidity);
-
-                    // process the result and store in the gas capacitance
-                    gc.po2 = result["po2"];
-                    gc.pco2 = result["pco2"];
-                    gc.pn2 = result["pn2"];
-                    gc.ph2o = result["ph2o"];
-                    gc.pother = result["pother"];
-
-                    gc.fo2 = result["fo2"];
-                    gc.fco2 = result["fco2"];
-                    gc.fn2 = result["fn2"];
-                    gc.fh2o = result["fh2o"];
-                    gc.fother = result["fother"];
-
-                    gc.co2 = result["co2"];
-                    gc.cco2 = result["cco2"];
-                    gc.cn2 = result["cn2"];
-                    gc.ch2o = result["ch2o"];
-                    gc.cother = result["cother"];
-
+                    AirComposition.SetAirComposition(gc, fio2, gc.temp, gc.humidity);
                 }
             }
 

@@ -10,7 +10,32 @@ namespace ExplainCoreLib.functions
         static readonly double fn2_dry = 0.794608;
         static readonly double fother_dry = 0.0;
 
-		public static Dictionary<string, double> CalcAirComposition(GasCapacitance gascomp, double fio2, double temp, double humidity)
+        public static void SetAirComposition(GasCapacitance gc, double fio2 = 0.205, double temp = 37.0, double humidity = 0.5)
+        {
+            AirCompositionResult result = CalcAirComposition(gc, fio2, temp, humidity);
+
+            // store a result
+            gc.po2 = result.po2;
+            gc.pco2 = result.pco2;
+            gc.pn2 = result.pn2;
+            gc.pother = result.pother;
+            gc.ph2o = result.ph2o;
+
+            gc.fo2 = result.fo2;
+            gc.fco2 = result.fco2;
+            gc.fn2 = result.fn2;
+            gc.fother = result.fother;
+            gc.fh2o = result.fh2o;
+
+            gc.co2 = result.co2;
+            gc.cco2 = result.cco2;
+            gc.cn2 = result.cn2;
+            gc.cother = result.cother;
+            gc.ch2o = result.ch2o;
+
+        }
+
+		public static AirCompositionResult CalcAirComposition(GasCapacitance gascomp, double fio2, double temp, double humidity)
 		{
             // make sure the latest pressure is available
             gascomp.CalcModel();
@@ -32,7 +57,7 @@ namespace ExplainCoreLib.functions
             return NewAirComposition(gascomp.pres, new_fo2_dry, new_fco2_dry, new_fn2_dry, new_fother_dry, gascomp.temp, gascomp.humidity);
         }
 
-		private static Dictionary<string, double> NewAirComposition(double pressure, double fo2_dry, double fco2_dry, double fn2_dry, double fother_dry, double temp, double humidity)
+		private static AirCompositionResult NewAirComposition(double pressure, double fo2_dry, double fco2_dry, double fn2_dry, double fother_dry, double temp, double humidity)
 		{
             const double GasConstant = 62.36367;
 
@@ -58,25 +83,50 @@ namespace ExplainCoreLib.functions
             double fother = pother / pressure;
             double cother = fother * ctotal;
 
-            return new Dictionary<string, double>
+            AirCompositionResult result = new()
             {
-                { "po2", po2 },
-                { "pco2", pco2 },
-                { "pn2", pn2 },
-                { "pother", pother },
-                { "ph2o", ph2o },
-                { "fo2", fo2 },
-                { "fco2", fco2 },
-                { "fn2", fn2 },
-                { "fother", fother },
-                { "fh2o", fh2o },
-                { "co2", co2 },
-                { "cco2", cco2 },
-                { "cn2", cn2 },
-                { "cother", cother },
-                { "ch2o", ch2o }
+                po2 = po2,
+                pco2 = pco2,
+                pn2 = pn2,
+                pother = pother,
+                ph2o = ph2o,
+
+                fo2 = fo2,
+                fco2 = fco2,
+                fn2 = fn2,
+                fother = fother,
+                fh2o = fh2o,
+
+                co2 = co2,
+                cco2 = cco2,
+                cn2 = cn2,
+                cother = cother,
+                ch2o = ch2o,
             };
+
+            return result;
         }
 	}
+
+    public struct AirCompositionResult
+    {
+        public double po2 { get; set; }
+        public double pco2 { get; set; }
+        public double pn2 { get; set; }
+        public double pother { get; set; }
+        public double ph2o { get; set; }
+
+        public double fo2 { get; set; }
+        public double fco2 { get; set; }
+        public double fn2 { get; set; }
+        public double fother { get; set; }
+        public double fh2o { get; set; }
+
+        public double co2 { get; set; }
+        public double cco2 { get; set; }
+        public double cn2 { get; set; }
+        public double cother { get; set; }
+        public double ch2o { get; set; }
+    }
 }
 

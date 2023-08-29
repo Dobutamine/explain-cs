@@ -7,4 +7,4 @@ string modelDefinition = File.ReadAllText("normal_neonate.json");
 ExplainCoreLib.ModelEngine engine = new(modelDefinition);
 
 // calculate 10 seconds
-engine.Calculate(60);
+engine.Calculate(10);
