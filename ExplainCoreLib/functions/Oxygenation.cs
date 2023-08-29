@@ -7,23 +7,18 @@ namespace ExplainCoreLib.functions
 	public static class Oxygenation
 	{
         // set the brent root finding properties
-        private static double brent_accuracy = 1e-8;
-        private static int max_iterations = 100;
-        private static double gas_constant = 62.36367;
-        private static double steps = 0;
+        private static readonly double brent_accuracy = 1e-8;
+        private static readonly int max_iterations = 100;
+        private static readonly double gas_constant = 62.36367;
 
         // oxygenation constants
-        private static double left_o2 = 0.01;
-        private static double right_o2 = 1000.0;
-        private static double alpha_o2p = 0.0095;
-        private static double mmoltoml = 22.2674;
+        private static readonly double left_o2 = 0.01;
+        private static readonly double right_o2 = 1000.0;
 
         // oxygenation
         private static double dpg = 5;
         private static double hemoglobin = 8.0;
         private static double temp = 37;
-        private static double pres = 0.0;
-
         private static double to2 = 0.0;
         private static double ph = 0.0;
         private static double be = 0.0;
@@ -45,7 +40,6 @@ namespace ExplainCoreLib.functions
             dpg = comp.aboxy["dpg"];
             hemoglobin = comp.aboxy["hemoglobin"];
             temp = comp.aboxy["temp"];
-            pres = comp.pres;
 
             // calculate the po2 from the to2 using a brent root finding function and oxygen dissociation curve
             po2 = BrentRootFindingProcedure.BrentRootFinding(OxygenContent, left_o2, right_o2, max_iterations, brent_accuracy);

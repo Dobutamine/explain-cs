@@ -101,6 +101,10 @@ public class ModelEngine
                         Container container = model.Value.ToObject<Container>();
                         models.Add(container.name, container);
                         break;
+                    case "GasExchanger":
+                        GasExchanger gasExchanger = model.Value.ToObject<GasExchanger>();
+                        models.Add(gasExchanger.name, gasExchanger);
+                        break;
                     case "Blood":
                         Blood blood = model.Value.ToObject<Blood>();
                         models.Add(blood.name, blood);
@@ -108,6 +112,14 @@ public class ModelEngine
                     case "Gas":
                         Gas gas = model.Value.ToObject<Gas>();
                         models.Add(gas.name, gas);
+                        break;
+                    case "Breathing":
+                        Breathing breathing = model.Value.ToObject<Breathing>();
+                        models.Add(breathing.name, breathing);
+                        break;
+                    case "Metabolism":
+                        Metabolism metabolism = model.Value.ToObject<Metabolism>();
+                        models.Add(metabolism.name, metabolism);
                         break;
                 }
             }
