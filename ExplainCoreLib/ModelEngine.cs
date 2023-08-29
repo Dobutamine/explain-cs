@@ -154,6 +154,9 @@ public class ModelEngine
                 // pass a reference to the models dictionary and the current stepsize to the submodels
                 submodel.Value.InitModel(models, modeling_stepsize);
             }
+
+            // initialize the dependent models. These models add model components to the list
+            ((Ventilator)models["Ventilator"]).BuildVentilator();
         }
         catch
         {
@@ -188,6 +191,12 @@ public class ModelEngine
 
             // update the model total model time
             model_time_total += modeling_stepsize;
+
+            //double pco2 = ((BloodCapacitance)models["AA"]).aboxy["pco2"];
+            //double po2 = ((BloodCapacitance)models["AA"]).aboxy["po2"];
+            //double respRate = ((Breathing)models["Breathing"]).target_tidal_volume;
+            //Console.WriteLine("po2: {0}, pco2: {1}", po2, pco2);
+            //Console.WriteLine(respRate * 1000);
         }
 
         // Stop the stopwatch after the step
