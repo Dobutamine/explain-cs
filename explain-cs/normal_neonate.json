@@ -647,7 +647,6 @@
         "RL"
       ],
       "vol": 0.246,
-      "vol_ext": 0.0,
       "u_vol": 0.27,
       "el_base": 80,
       "el_k": 0
@@ -975,7 +974,7 @@
       "name": "Ventilator",
       "description": "",
       "model_type": "Ventilator",
-      "is_enabled": true,
+      "is_enabled": false,
       "dependencies": ["DS", "MOUTH_DS"],
       "p_atm": 760.0,
       "temp": 37.0,

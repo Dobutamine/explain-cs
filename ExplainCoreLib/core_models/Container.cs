@@ -52,6 +52,7 @@ namespace ExplainCoreLib.core_models
         {
             // calculate the current volume
             vol = vol_ext;
+
             foreach (var rm in _caps)
             {
                 vol += rm.vol;
@@ -59,6 +60,7 @@ namespace ExplainCoreLib.core_models
 
             // calculate the pressure
             base.CalcModel();
+
 
             // transfer the pressures to the models the container contains
             foreach (var rm in _caps)

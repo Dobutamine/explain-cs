@@ -57,7 +57,7 @@ namespace ExplainCoreLib.functions
             return NewAirComposition(gascomp.pres, new_fo2_dry, new_fco2_dry, new_fn2_dry, new_fother_dry, gascomp.temp, gascomp.humidity);
         }
 
-		private static AirCompositionResult NewAirComposition(double pressure, double fo2_dry, double fco2_dry, double fn2_dry, double fother_dry, double temp, double humidity)
+		private static AirCompositionResult NewAirComposition(double pressure, double new_fo2_dry, double new_fco2_dry, double new_fn2_dry, double new_fother_dry, double temp, double humidity)
 		{
             const double GasConstant = 62.36367;
 
@@ -67,19 +67,19 @@ namespace ExplainCoreLib.functions
             double fh2o = ph2o / pressure;
             double ch2o = fh2o * ctotal;
 
-            double po2 = fo2_dry * (pressure - ph2o);
+            double po2 = new_fo2_dry * (pressure - ph2o);
             double fo2 = po2 / pressure;
             double co2 = fo2 * ctotal;
 
-            double pco2 = fco2_dry * (pressure - ph2o);
+            double pco2 = new_fco2_dry * (pressure - ph2o);
             double fco2 = pco2 / pressure;
             double cco2 = fco2 * ctotal;
 
-            double pn2 = fn2_dry * (pressure - ph2o);
+            double pn2 = new_fn2_dry * (pressure - ph2o);
             double fn2 = pn2 / pressure;
             double cn2 = fn2 * ctotal;
 
-            double pother = fother_dry * (pressure - ph2o);
+            double pother = new_fother_dry * (pressure - ph2o);
             double fother = pother / pressure;
             double cother = fother * ctotal;
 

@@ -6,13 +6,8 @@ string modelDefinition = File.ReadAllText("normal_neonate.json");
 // instantiate a model engine with the model definition file
 ExplainCoreLib.ModelEngine engine = new(modelDefinition);
 
-engine.SwitchVentilator(false);
 
-// calculate 10 seconds
-engine.Calculate(60);
-
-// start realtime model
-engine.Start(1.0);
-
+List<string> disabled_models = new List<string> {};
+engine.Calibrate(60, "AA", "MOUTH", disabled_models);
 
 

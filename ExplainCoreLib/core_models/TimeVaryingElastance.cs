@@ -38,11 +38,9 @@ namespace ExplainCoreLib.base_models
             {
                 double vol_diff = vol - (u_vol * u_vol_factor);
 
-                pres_ed = el_k * el_k_factor * Math.Pow(vol_diff, 2) +
-                          el_min * el_min_factor * vol_diff + pres_ext;
+                pres_ed = el_k * el_k_factor * Math.Pow(vol_diff, 2) + el_min * el_min_factor * vol_diff + pres_ext;
                 pres_ms = el_max * el_max_factor * vol_diff;
-                pres = act_factor * (pres_ms - pres_ed) + pres_ed +
-                        pres_cc + pres_atm + pres_mus;
+                pres = act_factor * (pres_ms - pres_ed) + pres_ed + pres_cc + pres_atm + pres_mus;
             }
             else
             {

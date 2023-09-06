@@ -143,7 +143,7 @@ namespace ExplainCoreLib.core_models
             {
                 _exp_timer += _t;
                 _ncc_exp++;
-                _temp_exp_volume += ((GasResistor) _models["MOUTH_DS"]).flow * _t;
+                _temp_exp_volume += ((GasResistor)_models["MOUTH_DS"]).flow * _t;
             }
 
             // reset the respiratory muscle pressure

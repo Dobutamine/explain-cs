@@ -34,7 +34,7 @@ namespace ExplainCoreLib.core_models
         {
             // translate the VO2 in ml/kg/min to VO2 in mmol for this stepsize (assumption is 37 degrees and atmospheric pressure)
             double vo2_step = ((0.039 * vo2 * vo2_factor * 3.3) / 60.0) * _t;
-
+  
             // do the metabolism in the metabolic active models
             foreach(var mam in metabolic_active_models)
             {

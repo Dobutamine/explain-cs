@@ -7,6 +7,7 @@ using ExplainCoreLib.base_models;
 using ExplainCoreLib.core_models;
 using ExplainCoreLib.helpers;
 using ExplainCoreLib.functions;
+using ExplainCoreLib.Interfaces;
 using Newtonsoft.Json;
 
 public class ModelEngine
@@ -216,6 +217,7 @@ public class ModelEngine
         Console.WriteLine("Press Enter to exit.");
         Console.ReadLine(); // This will keep the console application running
     }
+
     public void Stop()
     {
         _rtTimer.Dispose();
@@ -256,6 +258,53 @@ public class ModelEngine
     {
         ((Ventilator)models["Ventilator"]).SwitchVentilator(state);
 
+    }
+
+    public void GetBloodgas(string model)
+    {
+        if (models[model] is BloodCapacitance)
+        {
+            BloodComposition.SetBloodComposition((BloodCapacitance)models[model]);
+        }
+
+        if (models[model] is BloodTimeVaryingElastance)
+        {
+            BloodComposition.SetBloodComposition((BloodTimeVaryingElastance)models[model]);
+        }
+
+        IBlood bc = (IBlood)models[model];
+
+        Console.WriteLine("Blood pH: {0}, po2: {1}, pco2: {2}, tco2: {3}", bc.aboxy["ph"], bc.aboxy["po2"],  bc.aboxy["pco2"], bc.aboxy["tco2"]);
+    }
+
+    public void GetGasComposition(string model)
+    {
+        GasCapacitance gc = (GasCapacitance)models[model];
+        Breathing br = (Breathing)models["Breathing"];
+
+        Console.WriteLine("Pressure: {0}, volume {1}, po2: {2}, pco2: {3}, temp: {4}, humidity: {5}", gc.pres, gc.vol, gc.po2, gc.pco2, gc.temp, gc.humidity);
+        Console.WriteLine("Resp rate: {0}, target tv: {1}, target mv: {2}", br.resp_rate, br.target_tidal_volume, br.target_minute_volume);
+
+    }
+
+    public void Calibrate(double duration, string bc, string gc,  List<string> disabled_models)
+    {
+        // disable the models
+        foreach(var m in disabled_models)
+        {
+            models[m].is_enabled = false;
+        }
+
+        Console.WriteLine("");
+        GetBloodgas(bc);
+        GetGasComposition(gc);
+
+        Console.WriteLine("");
+        Calculate(duration);
+
+        Console.WriteLine("");
+        GetBloodgas(bc);
+        GetGasComposition(gc);
     }
 }
 

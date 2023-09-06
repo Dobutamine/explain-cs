@@ -15,10 +15,10 @@ namespace ExplainCoreLib.base_models
 
         public double vol { get; set; } = 1.0;
         public double pres { get; set; } = 0.0;
-        public double pres_ext { get; set; } = 1.0;
-        public double pres_cc { get; set; } = 1.0;
-        public double pres_atm { get; set; } = 1.0;
-        public double pres_mus { get; set; } = 1.0;
+        public double pres_ext { get; set; } = 0.0;
+        public double pres_cc { get; set; } = 0.0;
+        public double pres_atm { get; set; } = 0.0;
+        public double pres_mus { get; set; } = 0.0;
         public bool fixed_composition { get; set; } = false;
 
         public Capacitance(
